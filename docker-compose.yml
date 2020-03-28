@@ -1,0 +1,151 @@
+version: "3.2"
+
+services:
+
+  caAgent:
+    build:
+      context: ./apmia
+    image: ${COMPOSE_PROJECT_NAME}/caagent
+    container_name: ${COMPOSE_PROJECT_NAME}_caAgent
+    restart: always
+    environment:
+      image: caapm/apmia:latest
+      agentManager_url_1: ${AGENT_MANAGER_URL_1}
+      agentManager_url_2: ${AGENT_MANAGER_URL_2}
+      agentManager_credential: ${AGENT_MANAGER_CREDENTIAL}
+      APMENV_INTROSCOPE_AGENT_HOSTNAME: ${COMPOSE_PROJECT_NAME}_caAgent
+      APMENV_INTROSCOPE_AGENT_CUSTOMPROCESSNAME: Infrastructure
+      APMENV_INTROSCOPE_AGENT_AGENTNAME: ${COMPOSE_PROJECT_NAME}
+      APMENV_INTROSCOPE_AGENT_EXTENSIONS_BUNDLES_LOAD: DockerMonitor,HostMonitor
+      APMENV_INTROSCOPE_AGENT_EXTENSIONS_BUNDLES_BOOT_LOAD: MySQL,NGINX,PhpExtension
+      # For DockerMonitor
+      CONTAINER_ENVVARS_TO_ATTRIBUTES: enabled
+    pid: host
+    volumes:
+    - type: bind
+      source: /var/run/docker.sock
+      target: /run/docker.sock
+      read_only: true
+    - type: bind
+      source: /proc
+      target: /host/proc
+      read_only: true
+      bind:
+        propagation: rslave
+    networks:
+      - backend
+      - engine
+    
+  appServer:
+    build:
+      context: ./wordpress
+    image: ${COMPOSE_PROJECT_NAME}/appserver
+    container_name: ${COMPOSE_PROJECT_NAME}_appServer
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: dbServer
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD_FILE: /root/wp_db_password
+      WORDPRESS_DB_NAME: wordpress
+      APPSERVER_HOSTNAME: ${COMPOSE_PROJECT_NAME}_appServer
+    volumes:
+      - type: volume
+        source: wordpress
+        target: /var/www/html
+        read_only: false
+    depends_on:
+      - dbServer
+    networks:
+      - backend
+      - engine
+  
+  dbServer:
+    build:
+      context: ./mysql
+    image: ${COMPOSE_PROJECT_NAME}/dbserver
+    container_name: ${COMPOSE_PROJECT_NAME}_dbServer
+    restart: always
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD_FILE: /root/wp_db_password
+      MYSQL_ROOT_PASSWORD_FILE: /root/mysql_root_password
+    volumes:
+      - type: volume
+        source: sqldb
+        target: /var/lib/mysql
+    networks:
+      - backend
+
+  webServer:
+    build:
+      context: ./nginx
+    image: ${COMPOSE_PROJECT_NAME}/webserver
+    container_name: ${COMPOSE_PROJECT_NAME}_webServer
+    restart: always
+    volumes:
+      - type: volume
+        source: wordpress
+        target: /var/www/html
+        read_only: true
+    ports:
+      - 8080:80
+    depends_on:
+      - appServer
+    networks:
+      - engine
+      - frontend
+  
+  dashBoard:
+    build:
+      context: ./portainer
+    image: ${COMPOSE_PROJECT_NAME}/dashboard
+    container_name: ${COMPOSE_PROJECT_NAME}_dashBoard
+    restart: always
+    command: --admin-password-file /tmp/portainer_admin_password -H unix:///var/run/docker.sock
+    volumes:
+    - type: bind
+      source: /var/run/docker.sock
+      target: /var/run/docker.sock
+      read_only: false
+    networks:
+      - engine
+
+  nGrok:
+    build:
+      context: ./ngrok
+    image: ${COMPOSE_PROJECT_NAME}/ngrok
+    container_name: ${COMPOSE_PROJECT_NAME}_nGrok
+    networks:
+      - engine
+    tty: true
+
+  mailHog:
+    image: mailhog/mailhog
+    container_name: ${COMPOSE_PROJECT_NAME}_mailHog
+    restart: always
+    environment:
+      MH_HOSTNAME: mail.${COMPOSE_PROJECT_NAME}.org
+      MH_MAILDIR_PATH: /var/mail
+    volumes:
+      - type: volume
+        source: email
+        target: /var/mail
+        read_only: false
+    networks:
+      - engine
+    
+volumes:
+  email:
+  sqldb:
+  wordpress:
+
+networks:
+  backend:
+    driver: bridge
+    internal: true
+  engine:
+    driver: bridge
+  frontend:
+    driver: bridge
+  
