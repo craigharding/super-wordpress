@@ -118,7 +118,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_nGrok
     restart: always
     networks:
-      - engine
+      - frontend
     tty: true
 
   mailHog:
