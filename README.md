@@ -45,7 +45,7 @@ And the update-urls.bash script modifies the wp-config.php file to set the Wordp
 And then ...
 
 ```shell
-http://<yourProjectName.localhost:8080
+http://<yourProjectName>.localhost:8080
 ```
 
 When you connect to the new site you go through the initial Wordpress site configuration.
@@ -65,7 +65,7 @@ Using the DX APM Infrastructure Agent this Wordpress installation has these moni
 Easy Wordpress includes a Portainer container. Access it using: 
 
 ```shell
-http://<yourProjectName.localhost:8080/dashboard/
+http://<yourProjectName>.localhost:8080/dashboard/
 ```
 
 Login with "admin" and the contents of the portainer_admin_password file.
@@ -75,12 +75,12 @@ Login with "admin" and the contents of the portainer_admin_password file.
 I like [ngrok](https://www.ngrok.com/docs). You can host this site from your dev cloud using ngrok. Get your ngrok URL this way:
 
 ```shell
-docker attach <yourProjectName_nGrok
+docker attach <yourProjectName>_nGrok
 ```
 And then connect ...
 
 ```shell
-https://<someRandomNumber.ngrok.io
+https://<someRandomNumber>.ngrok.io
 ```
 
 ## Email Setup
@@ -92,7 +92,7 @@ install a WP plugin to send emails to this container. Use the
 Access the MailHog web UI using:
 
 ```shell
-http://<yourProjectName.localhost:8080/mailhog/
+http://<yourProjectName>.localhost:8080/mailhog/
 ```
 
 ## Customizing
