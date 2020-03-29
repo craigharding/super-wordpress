@@ -116,6 +116,7 @@ services:
       context: ./ngrok
     image: ${COMPOSE_PROJECT_NAME}/ngrok
     container_name: ${COMPOSE_PROJECT_NAME}_nGrok
+    restart: always
     networks:
       - engine
     tty: true
