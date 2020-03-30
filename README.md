@@ -26,7 +26,7 @@ You will need a system with Docker installed and running, docker-compose, openss
 
 Edit the .env file and update the connection information for DX APM. You can get the manager URLs and credential from one of the "Cloud Native" Agent downloads in your tenant.
 
-Edit the wordpress/ba.snippet file and paste in the BA snippet from the Manage Apps -- (yourAppName) -- WEB APP -- Web App integration instructions. Make sure to enclose the snippet in single quotes inside the file.
+Edit the wordpress/ba.snippet file and paste in the BA snippet from the Manage Apps --> (yourAppName) --> WEB APP --> Web App integration instructions. Make sure to enclose the snippet in single quotes inside the file.
 
 Then run ...
 
