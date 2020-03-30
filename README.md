@@ -36,7 +36,7 @@ docker-compose up -d
 ./update-urls.bash
 ```
 
-The gen-passwords.bash script uses openssl to generate three random passwords that are used to secure the mysql database and Portainer access. These get copied into the easy Wordpress images.
+The gen-passwords.bash script uses openssl to generate three random passwords that are used to secure the mysql database and Portainer access. These get copied into the Super Wordpress images.
 
 The docker-compose command downloads the base images, creates custom images, and starts your Wordpress project.
 
@@ -101,7 +101,7 @@ You will want to modify the nginx.conf file to suit your CMS site's URL. Change 
 
 I also recommend configuring your site's upload limit. There are settings for this in both nginx.conf and php.ini. My preference is to leave nginx at unlimited and set the threshold in php.ini.
 
-If you have an [ngrok account](https://dashboard.ngrok.com/login "Login"), put your auth token in the ngrok.yml file along with any other customizations to get your utilize the features available to your [plan](https://www.ngrok.com/pricing "ngrok Plans").
+If you have an [ngrok account](https://dashboard.ngrok.com/login "Login"), put your auth token in the ngrok.yml file along with any other customizations to utilize the features available to your [plan](https://www.ngrok.com/pricing "ngrok Plans").
 
 Once you have customized some settings you will need to rebuild the Docker images:
 
