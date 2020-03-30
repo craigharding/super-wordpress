@@ -12,7 +12,7 @@ WORKDIR /usr/local/PHPAgent
 
 # Log Level: 0=trace, 1=debug, 2=info, 3=warning, 4=error, 5=fatal
 # If PHP-FPM is started as non-daemon service enable this property and set value as '0'
-RUN sed -i -e s/wily_php_agent.logLevel=.*/wily_php_agent.logLevel=0/ /usr/local/PHPAgent/probe/wily_php_agent.ini ; \
+RUN sed -i -e s/wily_php_agent.logLevel=.*/wily_php_agent.logLevel=5/ /usr/local/PHPAgent/probe/wily_php_agent.ini ; \
 sed -i -e s/\;wily_php_agent.enablePhpProcessManager.support=.*/wily_php_agent.enablePhpProcessManager.support=0/ /usr/local/PHPAgent/probe/wily_php_agent.ini
 
 # Browser Agent
