@@ -1,7 +1,7 @@
-# authtoken: <yourAuthTokenGoesHere>
+# authtoken: <yourAuthToken>
 tunnels:
     wordpress:
-      addr: webServer:80
+      addr: web:80
       proto: http
       bind_tls: true
   
