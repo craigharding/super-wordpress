@@ -1,0 +1,16 @@
+#!/bin/bash
+
+DAYS_TO_KEEP=90
+EASY_HOME=/home/craig/dockerdev/ca-easy-wordpress
+
+# cleanup first
+find ${EASY_HOME}/backup -type f -mtime +${DAYS_TO_KEEP} -exec rm {} \;
+
+docker exec easy_dbServer /bin/bash -c "/usr/bin/mysqldump --databases wordpress | /bin/gzip > /tmp/easy_dbServer.sql.gz"
+docker exec -w / easy_appServer tar zcf /tmp/easy_appServer.tar.gz ./var/www/html
+docker exec -w / easy_mailHog tar zcf /tmp/easy_mailHog.tar.gz ./var/mail
+
+docker cp easy_dbServer:/tmp/easy_dbServer.sql.gz ${EASY_HOME}/backup/$(date +"%Y-%m-%d")-easy_dbServer.sql.gz
+docker cp easy_appServer:/tmp/easy_appServer.tar.gz ${EASY_HOME}/backup/$(date +"%Y-%m-%d")-easy_appServer.tar.gz
+docker cp easy_mailHog:/tmp/easy_mailHog.tar.gz ${EASY_HOME}/backup/$(date +"%Y-%m-%d")-easy_mailHog.tar.gz
+
