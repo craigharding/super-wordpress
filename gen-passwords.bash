@@ -16,4 +16,4 @@ sed -i -e "s|password = .*|password = \'$(cat mysql/mysql_root_password)\'|" mys
 sed -i -e "s|wordpressdb.password=.*|wordpressdb.password=\'$(cat mysql/wp_db_password)\'|" apmia/mysql.bundle.properties
 
 # update this install directory in the backup script
-sed -i -e "s|EASY_HOME=.*|EASY_HOME=$PWD|" backup/backup_wordpress
+sed -i -e "s|SUPER_HOME=.*|SUPER_HOME=$PWD|" backup/backup_wordpress
