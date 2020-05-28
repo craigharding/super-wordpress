@@ -43,7 +43,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_appServer
     restart: always
     environment:
-      WORDPRESS_DB_HOST: dbServer
+      WORDPRESS_DB_HOST: ${COMPOSE_PROJECT_NAME}_dbServer
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD_FILE: /root/wp_db_password
       WORDPRESS_DB_NAME: wordpress
